@@ -1,0 +1,4 @@
+# Tema (por default es el tema de saga, tema oscuro es vela)
+joinfaces:
+  primefaces:
+    theme: saga
