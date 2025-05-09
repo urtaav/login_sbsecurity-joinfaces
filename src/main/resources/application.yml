@@ -1,4 +1,6 @@
 # Tema (por default es el tema de saga, tema oscuro es vela)
-joinfaces:
-  primefaces:
-    theme: saga
+server:
+  port: 8081
+# joinfaces:
+#   primefaces:
+#     theme: saga
