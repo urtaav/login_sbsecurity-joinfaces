@@ -55,126 +55,106 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="card">
-                            <h:form>
+                        <div class="card surface-card p-4 shadow-2 border-round">
+                            <h:form id="formRegistro" class="grid formgrid ui-fluid">
                         
-                                <p:growl id="growl" sticky="true" showDetail="true"/>
+                                <!-- Mensajes de validación -->
+                                <p:growl id="messages" showDetail="true" showSummary="false" />
                         
-                                <p:wizard flowListener="#{userWizard.onFlowProcess}">
-                                    <p:tab id="personal" title="Registro 1">
-                                        <p:panel header="Personal Details">
-                                            <p:messages/>
-                                            <h:panelGrid columns="2" columnClasses="label, value">
-                                                <h:outputText value="Firstname: *"/>
-                                                <p:inputText id="firstname" value="#{userWizard.user.firstname}" 
-                                                                required="true" 
-                                                                label="Nombre"
-                                                                requiredMessage="El nombre es obligatorio"
-                                                                validatorMessage="Solo se permiten letras en el nombre."   styleClass="uppercase-input">
-                                                    <f:validateRegex pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$"/>
-                                                </p:inputText>
-                                                <p:message for="firstname" />
+                                <!-- Leyenda de ayuda -->
+                                <p:outputPanel styleClass="col-12 mb-3">
+                                    <p:outputLabel value="Este formulario está dividido en 4 secciones para facilitar su llenado. Completa cada una y avanza con el botón 'Siguiente'." />
+                                </p:outputPanel>
+                        
+                                <!-- Progreso del formulario -->
+                                 <div class="col-12">
+                                    <p:steps activeIndex="#{jcaRegisterView.stepIndex}" readonly="true">
+                                        <p:menuitem value="Sección 1" />
+                                        <p:menuitem value="Sección 2" />
+                                        <p:menuitem value="Sección 3" />
+                                        <p:menuitem value="Sección 4" />
+                                    </p:steps>
+                                 </div>
 
-                                   
                         
-                                                <h:outputText value="Lastname: *"/>
-                                                <p:inputText id="lastname" value="#{userWizard.user.lastname}" required="true" label="Lastname"
-                                                requiredMessage="Campo requerido :o">
-                                                <f:validateRegex pattern="^[a-zA-Z]+$"/>
-                                                <f:validateLength minimum="3" maximum="10"/>
-                                                </p:inputText>
-                                                <p:message for="lastname" />
-                                                <h:outputText value="Age: "/>
-                                                <p:inputText value="#{userWizard.user.age}"/>
+                                <!-- Paso 1 -->
+                                <ui:fragment rendered="#{jcaRegisterView.stepIndex eq 0}">
+                                    <div class="field col-12 md:col-6">
+                                        <p:outputLabel value="Nombre completo:" for="nombre" />
+                                        <p:inputText id="nombre" value="#{jcaRegisterView.registro.nombreCompleto}" required="true"
+                                            requiredMessage="El nombre completo es obligatorio">
+                                            <f:validateLength minimum="3" maximum="50" />
+                                            <f:validateRegex pattern="^[a-zA-Z ]+$" />
+                                        </p:inputText>
+                                    </div>
+                                    <div class="field col-12 md:col-6"></div>
+                                    <div class="flex justify-content-center w-full mt-4">
+                                        <div class="flex justify-content-center gap-2">
+                                            <p:commandButton value="Siguiente" action="#{jcaRegisterView.siguientePaso}" update="@form" />
+                                        </div>
+                                    </div>
+                                </ui:fragment>
                         
-                                                <h:outputText value="Skip to last: "/>
-                                                <h:selectBooleanCheckbox value="#{userWizard.skip}"/>
-                                            </h:panelGrid>
-                                        </p:panel>
-                                    </p:tab>
+                                <!-- Paso 2 -->
+                                <ui:fragment rendered="#{jcaRegisterView.stepIndex eq 1}">
+                                    <div class="field col-12 md:col-6">
+                                        <p:outputLabel value="Número de Asiento:" for="asiento" />
+                                        <p:inputText id="asiento" value="#{jcaRegisterView.registro.numeroAsiento}" required="true">
+                                            <f:validator validatorId="soloNumerosValidator" />
+                                        </p:inputText>
+                                    </div>
+                                    <div class="field col-12 md:col-6"></div>
+                                    <div class="flex justify-content-center w-full mt-4">
+                                        <div class="flex justify-content-center gap-2">
+                                            <p:commandButton value="Atrás" action="#{jcaRegisterView.pasoAnterior}" update="@form" styleClass="mr-2" />
+                                            <p:commandButton value="Siguiente" action="#{jcaRegisterView.siguientePaso}" update="@form" />
+                                        </div>
+                                    </div>
+                                </ui:fragment>
                         
-                                    <p:tab id="address" title="Registro 2">
-                                        <p:panel header="Address Details">
-                                            <p:messages/>
-                                            <h:panelGrid columns="2" columnClasses="label, value">
-                                                <h:outputText value="Street: "/>
-                                                <p:inputText value="#{userWizard.user.street}"/>
+                                <!-- Paso 3 -->
+                                <ui:fragment rendered="#{jcaRegisterView.stepIndex eq 2}">
+                                    <     <div class="field col-12 md:col-6">
+                                        <p:outputLabel value="Número de Tarjeta:" for="tarjeta" />
+                                        <p:inputText id="tarjeta" value="#{jcaRegisterView.registro.numeroTarjeta}">
+                                            <f:validator validatorId="tarjetaValidator" />
+                                        </p:inputText>
+                                    </div>
+                                    <div class="field col-12 md:col-6"></div>
+                                    <div class="flex justify-content-center w-full mt-4">
+                                        <div class="flex justify-content-center gap-2">
+                                            <p:commandButton value="Atrás" action="#{jcaRegisterView.pasoAnterior}" update="@form" styleClass="mr-2" />
+                                            <p:commandButton value="Siguiente" action="#{jcaRegisterView.siguientePaso}" update="@form" />
+                                        </div>
+                                    </div>
+                                </ui:fragment>
                         
-                                                <h:outputText value="Postal Code: "/>
-                                                <p:inputText value="#{userWizard.user.postalCode}"/>
-                        
-                                                <h:outputText value="City: "/>
-                                                <p:inputText value="#{userWizard.user.city}"/>
-                        
-                                                <h:outputText value="Skip to last: "/>
-                                                <h:selectBooleanCheckbox value="#{userWizard.skip}"/>
-                                            </h:panelGrid>
-                                        </p:panel>
-                                    </p:tab>
-                        
-                                    <p:tab id="contact" title="Registro 3">
-                                        <p:panel header="Contact Information">
-                                            <p:messages/>
-                                            <h:panelGrid columns="2" columnClasses="label, value">
-                                                <h:outputText value="Email: *"/>
-                                                <p:inputText value="#{userWizard.user.email}" required="true" label="Email"/>
-                        
-                                                <h:outputText value="Phone: "/>
-                                                <p:inputText value="#{userWizard.user.phone}" mask="(999) 999-9999" validateMask="true" />
-                        
-                                                <h:outputText value="Additional Info: "/>
-                                                <p:inputText value="#{userWizard.user.info}"/>
-                                            </h:panelGrid>
-                                        </p:panel>
-                                    </p:tab>
-                        
-                                    <p:tab id="confirm" title="Registro 4">
-                                        <p:panel header="Confirmation">
-                                            <h:panelGrid id="confirmation" columns="3" columnClasses="grid,grid,grid">
-                                                <h:panelGrid columns="2" columnClasses="label, value">
-                                                    <h:outputText value="Firstname: "/>
-                                                    <h:outputText value="#{userWizard.user.firstname}" styleClass="outputLabel"/>
-                        
-                                                    <h:outputText value="Lastname: "/>
-                                                    <h:outputText value="#{userWizard.user.lastname}" styleClass="outputLabel"/>
-                        
-                                                    <h:outputText value="Age: "/>
-                                                    <h:outputText value="#{userWizard.user.age}" styleClass="outputLabel"/>
-                                                </h:panelGrid>
-                        
-                                                <h:panelGrid columns="2" columnClasses="label, value">
-                                                    <h:outputText value="Street: "/>
-                                                    <h:outputText value="#{userWizard.user.street}" styleClass="outputLabel"/>
-                        
-                                                    <h:outputText value="Postal: "/>
-                                                    <h:outputText value="#{userWizard.user.postalCode}" styleClass="outputLabel"/>
-                        
-                                                    <h:outputText value="City: "/>
-                                                    <h:outputText value="#{userWizard.user.city}" styleClass="outputLabel"/>
-                                                </h:panelGrid>
-                        
-                                                <h:panelGrid columns="2" columnClasses="label, value">
-                                                    <h:outputText value="Email: "/>
-                                                    <h:outputText value="#{userWizard.user.email}" styleClass="outputLabel"/>
-                        
-                                                    <h:outputText value="Phone "/>
-                                                    <h:outputText value="#{userWizard.user.phone}" styleClass="outputLabel"/>
-                        
-                                                    <h:outputText value="Info: "/>
-                                                    <h:outputText value="#{userWizard.user.info}" styleClass="outputLabel"/>
-                        
-                                                    <h:outputText/>
-                                                    <h:outputText/>
-                                                </h:panelGrid>
-                                            </h:panelGrid>
-                        
-                                            <p:commandButton value="Submit" action="#{userWizard.save}" update="growl" process="@this"/>
-                                        </p:panel>
-                                    </p:tab>
-                                </p:wizard>
+                                <!-- Paso 4 -->
+                                <ui:fragment rendered="#{jcaRegisterView.stepIndex eq 3}">
+                                    <div class="field col-12 md:col-6">
+                                        <p:outputLabel value="Email de Confirmación:" for="email" />
+                                        <p:inputText id="email" value="#{jcaRegisterView.registro.emailConfirmacion}" >
+                                            <f:validator validatorId="emailValidator" />
+                                        </p:inputText>
+                                    </div>
+                    
+                                    <div class="field col-12 md:col-6">
+                                        <p:outputLabel for="phone" value="Teléfono de contacto:" />
+                                        <p:inputMask id="phone" value="#{jcaRegisterView.registro.phone}" mask="(999) 999-9999" validateMask="true" />
+                                    </div>
+                    
+                                    
+                                    <div class="flex justify-content-center w-full mt-4">
+                                        <div class="flex justify-content-center gap-2">
+                                            <p:commandButton value="Atrás" action="#{jcaRegisterView.pasoAnterior}" update="@form" styleClass="mr-2" />
+                                            <p:commandButton value="Finalizar" action="#{jcaRegisterView.finalizarRegistro}" update="@form" />
+                                        </div>
+                                    </div>
+                                </ui:fragment>
                         
                             </h:form>
                         </div>
+                        
                     </section>
                 </div>
             </div>
